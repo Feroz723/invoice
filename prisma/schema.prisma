@@ -1,0 +1,48 @@
+// Prisma schema — Invoice Tracker
+// PostgreSQL + Prisma ORM. See https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String?
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  invoices     Invoice[]
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  // Product-facing "Invoice ID": auto-generated sequential number.
+  invoiceId     Int           @unique @default(autoincrement())
+  clientName    String
+  invoiceAmount Decimal       @db.Decimal(12, 2)
+  dueDate       DateTime
+  status        InvoiceStatus @default(UNPAID)
+  clientEmail   String?
+  lastFollowUp  DateTime?
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  lastReminderSentAt DateTime?
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}

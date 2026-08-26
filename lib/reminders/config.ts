@@ -1,0 +1,5 @@
+export const REMINDER_DAYS_BEFORE_DUE = 3;
+
+export const FOLLOW_UP_SUPPRESS_DAYS = 3;
+
+export const REMINDER_RESEND_SUPPRESS_DAYS = 3;
