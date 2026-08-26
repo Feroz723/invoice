@@ -200,18 +200,18 @@ export default async function Home() {
           &copy; 2026 Invoice Tracker. All rights reserved.
         </p>
         <div className="flex gap-6 text-xs text-slate-400">
-          <a
+          <Link
             className="hover:text-cyan-400 transition-colors duration-200"
-            href="#"
+            href="/privacy"
           >
             Privacy Policy
-          </a>
-          <a
+          </Link>
+          <Link
             className="hover:text-cyan-400 transition-colors duration-200"
-            href="#"
+            href="/terms"
           >
             Terms of Service
-          </a>
+          </Link>
         </div>
       </footer>
     </div>
