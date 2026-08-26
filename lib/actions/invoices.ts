@@ -5,6 +5,9 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { normalizeClientEmail } from "@/lib/email-validation";
 import { prisma } from "@/lib/prisma";
+import { evaluateReminder } from "@/lib/reminders/eligibility";
+import { buildReminderEmail } from "@/lib/reminders/email";
+import { sendReminderEmail } from "@/lib/resend";
 
 export type ActionError = { ok: false; error: string };
 export type ActionSuccess = { ok: true };
@@ -118,7 +121,50 @@ export async function createInvoice(input: InvoiceInput): Promise<ActionSuccess 
     if (parsed.data.lastFollowUp !== undefined) {
       createData.lastFollowUp = parsed.data.lastFollowUp;
     }
-    await prisma.invoice.create({ data: createData });
+
+    const newInvoice = await prisma.invoice.create({ data: createData });
+
+    // Immediate Email Delivery Trigger if invoice is eligible (e.g. due tomorrow/today/within 3 days)
+    try {
+      const evaluation = evaluateReminder({
+        invoiceId: newInvoice.invoiceId,
+        clientName: newInvoice.clientName,
+        clientEmail: newInvoice.clientEmail,
+        invoiceAmount: newInvoice.invoiceAmount.toFixed(2),
+        dueDate: newInvoice.dueDate.toISOString(),
+        status: newInvoice.status,
+        lastFollowUp: newInvoice.lastFollowUp ? newInvoice.lastFollowUp.toISOString() : null,
+        lastReminderSentAt: null,
+      });
+
+      if (evaluation.businessEligible && evaluation.hasRecipient && evaluation.recipientEmail) {
+        const content = buildReminderEmail({
+          clientName: newInvoice.clientName,
+          invoiceId: newInvoice.invoiceId,
+          invoiceAmount: newInvoice.invoiceAmount.toFixed(2),
+          dueDate: newInvoice.dueDate.toISOString(),
+          status: newInvoice.status,
+          kind: evaluation.kind!,
+        });
+
+        const sendResult = await sendReminderEmail({
+          to: evaluation.recipientEmail,
+          subject: content.subject,
+          html: content.html,
+          text: content.text,
+        });
+
+        if (sendResult.ok) {
+          await prisma.invoice.update({
+            where: { invoiceId: newInvoice.invoiceId },
+            data: { lastReminderSentAt: new Date() },
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Immediate reminder dispatch error:", err);
+    }
+
     revalidatePath("/dashboard");
     return { ok: true };
   } catch (error) {
