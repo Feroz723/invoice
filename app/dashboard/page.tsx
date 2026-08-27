@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { getInvoices } from "@/lib/invoices";
@@ -61,14 +62,14 @@ export default async function DashboardPage() {
   return (
     <main className="min-h-screen w-full bg-[#090d16] text-slate-100 selection:bg-cyan-500 selection:text-slate-950">
       <header className="sticky top-0 z-30 flex w-full items-center justify-between border-b border-slate-800/80 bg-slate-950/80 px-4 py-3.5 backdrop-blur-md sm:px-8 md:px-12">
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_12px_rgba(0,243,255,0.5)]">
+        <Link href="/dashboard" className="flex items-center gap-3 group">
+          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_12px_rgba(0,243,255,0.5)] group-hover:scale-105 transition-transform">
             <span className="text-slate-950 font-black text-sm">⚡</span>
           </div>
-          <span className="text-lg font-bold tracking-tight text-white">
+          <span className="text-lg font-bold tracking-tight text-white group-hover:text-cyan-300 transition-colors">
             Invoice<span className="text-cyan-400">Tracker</span>
           </span>
-        </div>
+        </Link>
         <div className="flex items-center gap-4 text-sm">
           <span className="hidden text-slate-300 sm:inline">
             {user.name ?? user.email}

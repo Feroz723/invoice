@@ -12,14 +12,14 @@ export default async function Home() {
     <div className="min-h-screen w-full bg-[#090d16] text-slate-100 selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden bg-grid-animated relative">
       {/* ── Top Navigation ──────────────────────────────────── */}
       <nav className="sticky top-0 z-50 flex w-full items-center justify-between px-4 sm:px-8 md:px-12 lg:px-16 h-20 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 transition-all duration-200">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(0,243,255,0.5)] transform hover:rotate-6 transition-transform">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(0,243,255,0.5)] transform group-hover:rotate-6 transition-transform">
             <span className="text-slate-950 font-black text-xl">⚡</span>
           </div>
-          <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
+          <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-white group-hover:text-cyan-300 transition-colors">
             Invoice<span className="text-cyan-400">Tracker</span>
           </span>
-        </div>
+        </Link>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
           <a
             className="text-slate-300 hover:text-cyan-400 transition-colors duration-200"
@@ -343,14 +343,14 @@ export default async function Home() {
 
       {/* ── Footer ──────────────────────────────────────────── */}
       <footer className="w-full py-12 px-4 sm:px-8 md:px-12 lg:px-16 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-slate-800 bg-[#090d16]">
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_12px_rgba(0,243,255,0.4)]">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_12px_rgba(0,243,255,0.4)] group-hover:scale-105 transition-transform">
             <span className="text-slate-950 font-black text-xs">⚡</span>
           </div>
-          <span className="text-lg font-bold text-white tracking-tight">
+          <span className="text-lg font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
             Invoice<span className="text-cyan-400">Tracker</span>
           </span>
-        </div>
+        </Link>
         <p className="text-xs text-slate-400">
           &copy; 2026 Invoice Tracker. All rights reserved.
         </p>
