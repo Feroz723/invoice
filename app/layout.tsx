@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Invoice Tracker",
+  title: "Invoice Tracker — Get Paid Faster",
   description:
-    "Track invoices, monitor payments, and automate reminders. The clean tool for freelancers and small businesses.",
+    "Track invoices, monitor payments in ₹ INR, and automate reminders. The clean tool for freelancers and small businesses.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
